@@ -1,0 +1,14 @@
+# The WordPress repository for this project.
+[submodule "fobv-wordpress"]
+	path = wordpress
+	url = git@github.com:varilink/fobv-wordpress.git
+
+# The proxy tool from Varilink's "Tools - Proxy" repository.
+[submodule "tools-proxy"]
+	path = tools/proxy
+	url = git@github.com:varilink/tools-proxy.git
+
+# The WordPress tool from Varilink's "Tools - WordPress" repository.
+[submodule "tools-wordpress"]
+	path = tools/wordpress
+	url = git@github.com:varilink/tools-wordpress.git
