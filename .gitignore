@@ -1,0 +1,11 @@
+# Any backups used to bootstrap the development environment
+/backup
+
+# Any packages sourced via npm
+/node_modules
+
+# Any swap files left hanging by the vi editor
+*.swp
+
+# Environment settings that contain sensitive information
+/secret.env
