@@ -12,3 +12,8 @@
 [submodule "tools-wordpress"]
 	path = tools/wordpress
 	url = git@github.com:varilink/tools-wordpress.git
+
+# The NPM tool from Varilink's "Tools - NPM" repository.
+[submodule "tools/npm"]
+	path = tools/npm
+	url = git@github.com:varilink/tools-npm.git
