@@ -1,0 +1,115 @@
+version: "3.6"
+
+services:
+
+  wordpress:
+
+    depends_on:
+     - db
+
+    env_file:
+      - ./public.env # Public environment variables file
+      - ./secret.env # Secret environment variables file
+
+    environment:
+      WORDPRESS_CONFIG_EXTRA: |
+        define( 'FOBV_ENV',
+          getenv ( 'FOBV_ENV' ) );
+        define( 'FOBV_MAILCHIMP_EMAIL',
+          getenv ( 'FOBV_MAILCHIMP_EMAIL' ) );
+        define( 'FOBV_MEMBERSHIP_EMAIL',
+          getenv ( 'FOBV_MEMBERSHIP_EMAIL' ) );
+        define( 'FOBV_OVERRIDE_EMAIL',
+          getenv ( 'FOBV_OVERRIDE_EMAIL' ) );
+        define( 'FOBV_TREASURER_EMAIL',
+          getenv ( 'FOBV_TREASURER_EMAIL' ) );
+        define( 'FOBV_THE_VIADUCT_PAGE_ID',
+          getenv ( 'FOBV_THE_VIADUCT_PAGE_ID' ) );
+        define( 'FOBV_THE_PROJECT_PAGE_ID',
+          getenv ( 'FOBV_THE_PROJECT_PAGE_ID' ) );
+        define( 'FOBV_THE_FOBV_PAGE_ID',
+          getenv ( 'FOBV_THE_FOBV_PAGE_ID' ) );
+        define( 'FOBV_DONATE_TO_OUR_CAUSE_PAGE_ID',
+          getenv ( 'FOBV_DONATE_TO_OUR_CAUSE_PAGE_ID' ) );
+        define( 'FOBV_DONATE_VIA_AMAZON_SMILE_PAGE_ID',
+          getenv ( 'FOBV_DONATE_VIA_AMAZON_SMILE_PAGE_ID' ) );
+        define( 'FOBV_DONATION_RECEIVED_PAGE_ID',
+          getenv ( 'FOBV_DONATION_RECEIVED_PAGE_ID' ) );
+        define( 'FOBV_JOIN_US_OR_RENEW_YOUR_MEMBERSHIP_PAGE_ID',
+          getenv ( 'FOBV_JOIN_US_OR_RENEW_YOUR_MEMBERSHIP_PAGE_ID' ) );
+        define( 'FOBV_MEMBERSHIP_CONFIRMATION_PAGE_ID',
+          getenv ( 'FOBV_MEMBERSHIP_CONFIRMATION_PAGE_ID' ) );
+        define( 'FOBV_SUBSCRIBE_TO_OUR_MAILING_LIST_PAGE_ID',
+          getenv ( 'FOBV_SUBSCRIBE_TO_OUR_MAILING_LIST_PAGE_ID' ) );
+        define( 'FOBV_SUBSCRIPTION_CONFIRMATION_PAGE_ID',
+          getenv ( 'FOBV_SUBSCRIPTION_CONFIRMATION_PAGE_ID' ) );
+        define( 'FOBV_MAILCHIMP_API_KEY',
+          getenv ( 'FOBV_MAILCHIMP_API_KEY' ) );
+        define( 'FOBV_MAILCHIMP_API_ROOT',
+          getenv ( 'FOBV_MAILCHIMP_API_ROOT' ) );
+        define( 'FOBV_MAILCHIMP_LIST_ID',
+          getenv ( 'FOBV_MAILCHIMP_LIST_ID' ) );
+        define( 'FOBV_MAILCHIMP_TEST_LIST_ID',
+          getenv ( 'FOBV_MAILCHIMP_TEST_LIST_ID' ) );
+        define( 'FOBV_MAILCHIMP_MEMBERS_INTEREST_CATEGORY',
+          getenv ( 'FOBV_MAILCHIMP_MEMBERS_INTEREST_CATEGORY' ) );
+        define( 'FOBV_MAILCHIMP_VOLUNTEERING_INTEREST_CATEGORY',
+          getenv ( 'FOBV_MAILCHIMP_VOLUNTEERING_INTEREST_CATEGORY' ) );
+        define( 'FOBV_MAILCHIMP_MEMBERS_MERGE_FIELD',
+          getenv ( 'FOBV_MAILCHIMP_MEMBERS_MERGE_FIELD' ) );
+        define( 'FOBV_MAILCHIMP_VOLUNTEERING_MERGE_FIELD',
+          getenv ( 'FOBV_MAILCHIMP_VOLUNTEERING_MERGE_FIELD' ) );
+        define( 'FOBV_PAYPAL_API_DOMAIN',
+          getenv ( 'FOBV_PAYPAL_API_DOMAIN' ) );
+        define( 'FOBV_PAYPAL_APP_CLIENT_ID',
+          getenv ( 'FOBV_PAYPAL_APP_CLIENT_ID' ) );
+        define( 'FOBV_PAYPAL_APP_SECRET',
+          getenv ( 'FOBV_PAYPAL_APP_SECRET' ) );
+        define( 'FOBV_PAYPAL_BRAND_NAME',
+          getenv ( 'FOBV_PAYPAL_BRAND_NAME' ) );
+        define( 'FOBV_PAYPAL_MERCHANT_ID',
+          getenv ( 'FOBV_PAYPAL_MERCHANT_ID' ) );
+        define( 'FOBV_PAYPAL_WEBHOOK_ID',
+          getenv ( 'FOBV_WEBHOOK_ID' ) );
+        define( 'FOBV_PRIVACY_POLICY_PAGE_ID',
+          getenv ( 'FOBV_PRIVACY_POLICY_PAGE_ID' ) );
+        define( 'FOBV_EMAIL_SENDER',
+          getenv ( 'FOBV_EMAIL_SENDER' ) ) ;
+
+    volumes:
+      - ./wordpress/theme/:/var/www/html/wp-content/themes/wp-bootstrap-starter-child:ro
+      - ./wordpress/plugins/varilink-log-writer:/var/www/html/wp-content/plugins/varilink-log-writer:ro
+      - ./wordpress/plugins/varilink-mailchimp:/var/www/html/wp-content/plugins/varilink-mailchimp:ro
+      - ./wordpress/plugins/varilink-paypal:/var/www/html/wp-content/plugins/varilink-paypal:ro
+
+  db:
+
+    volumes:
+      - ./backup:/docker-entrypoint-initdb.d:ro
+  
+  wp-cli:
+
+    env_file:
+      - ./public.env
+      - ./secret.env
+
+    volumes:
+      - ./backup/:/backup/
+      - ./wordpress/theme/:/var/www/html/wp-content/themes/wp-bootstrap-starter-child/:ro
+      - ./wordpress/wp-scripts/:/wp-scripts/
+
+  npm:
+
+    volumes:
+      - ./wordpress:/home/npm
+
+  sass:
+
+    build: ./tools/npm
+
+    entrypoint: /node_modules/.bin/sass
+
+    volumes:
+      - ./wordpress/node_modules:/node_modules
+      - ./wordpress/theme/assets/scss:/scss
+      - ./wordpress/theme/assets/css:/css
