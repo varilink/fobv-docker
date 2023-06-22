@@ -17,3 +17,8 @@
 [submodule "tools/npm"]
 	path = tools/npm
 	url = git@github.com:varilink/tools-npm.git
+
+# The GIMP tool from Varilink's "Tools - GIMP" repository.
+[submodule "tools/gimp"]
+	path = tools/gimp
+	url = git@github.com:varilink/tools-gimp.git

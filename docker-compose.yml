@@ -113,3 +113,9 @@ services:
       - ./wordpress/node_modules:/node_modules
       - ./wordpress/theme/assets/scss:/scss
       - ./wordpress/theme/assets/css:/css
+
+  gimp:
+
+    volumes:
+      - ./wordpress/gimp/:/gimp/
+      - ./wordpress/fobv-site-theme/assets/img/:/gimp/dist/
