@@ -18,6 +18,7 @@ services:
 
     environment:
       WORDPRESS_CONFIG_EXTRA: |
+        define('WP_AUTO_UPDATE_CORE', false);
         define(
           'FOBV_ENV', getenv( 'FOBV_ENV' )
         );
